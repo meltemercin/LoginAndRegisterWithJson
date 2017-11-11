@@ -3,6 +3,7 @@ package meltemercin.loginandregisterwithjson;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ public class MainActivity extends AppCompatActivity
 {
     EditText mail,pass;
     String email,sifre;
+   static SharedPreferences sp;
+    static SharedPreferences.Editor edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -28,23 +31,31 @@ public class MainActivity extends AppCompatActivity
         mail = findViewById(R.id.mail);
         pass = findViewById(R.id.pass);
 
+sp=getSharedPreferences("urun",Context.MODE_PRIVATE);
+edit=sp.edit();
+String kulId=sp.getString("kid","");
+if(!kulId.equals(""))
+{
+   Intent pi=new Intent(MainActivity.this,Profil.class);
+   pi.putExtra("kulid",kulId);
+   startActivity(pi);
+
+}
     }
 
     public void girisYap(View view)
     {
         email=mail.getText().toString();
         sifre=pass.getText().toString();
-String url="http://jsonbulut.com" +
-        "/json/userLogin.php?ref=c539de7cf7ab8f5eeb54ea3aaf93f727" +
-        "&userEmail="+email +
-        "&userPass="+sifre+
-        "&face=no";
+     String  url = "http://jsonbulut.com/json/userLogin.php?ref=cb226ff2a31fdd460087fedbb34a6023&" +
+                "userEmail=" + email +
+                "&userPass=" + sifre +
+                "&face=no";
 new jsonData(url,MainActivity.this).execute();
 
 
 
-        Intent intent = new Intent(MainActivity.this, Profil.class);
-        startActivity(intent);
+
     }
 
     public void kayitYap(View view)
@@ -66,7 +77,7 @@ class jsonData extends AsyncTask<Void, Void, Void> {
         this.url = url;
         this.cnx = cnx;
         pd = new ProgressDialog(cnx);
-        pd.setMessage("İşlem gerçekleşiyor azıcık bekle");
+        pd.setMessage("İşlem gerçekleşiyor lütfen bekleyiniz");
         pd.show();
     }
 
@@ -80,9 +91,11 @@ class jsonData extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
 
-        try {
+        try
+        {
             data = Jsoup.connect(url).ignoreContentType(true).get().body().text();
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
             Log.e("data json hatası", "doınBackground", ex);
         }
 
@@ -99,13 +112,26 @@ class jsonData extends AsyncTask<Void, Void, Void> {
         Log.d("gelen data : ", data);
         try {
             JSONObject obj = new JSONObject(data);
+            //çünkü durum boolean bir deger
             boolean durum = obj.getJSONArray("user").getJSONObject(0).getBoolean("durum");
             String mesaj = obj.getJSONArray("user").getJSONObject(0).getString("mesaj");
             if (durum == true) {
                 //kayıt basarılı
                 Toast.makeText(cnx, mesaj, Toast.LENGTH_SHORT).show();
-                String kid = obj.getJSONArray("user").getJSONObject(0).getString("kullaniciId");
+                //id çekiyoruz
+                //Object olduğunu süslü parantezden anlıyoruz
+                String kid = obj.getJSONArray("user")
+                        .getJSONObject(0)
+                        .getJSONObject("bilgiler")
+                        .getString("userId");
                 Log.d("kid = ", kid);
+                MainActivity.edit.putString("kid",kid);
+MainActivity.edit.commit();
+
+
+
+Intent intent=new Intent(cnx,Profil.class);
+cnx.startActivity(intent);
             } else {
                 //kayıt basarısız
                 Toast.makeText(cnx, mesaj, Toast.LENGTH_SHORT).show();
@@ -114,7 +140,7 @@ class jsonData extends AsyncTask<Void, Void, Void> {
             e.printStackTrace();
         }
 
-        //yükleme ekranını tamamla
+        //yükleme ekranını tamamla(progressbarı kapatıyoruz)
         pd.dismiss();
     }
 }

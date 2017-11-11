@@ -4,6 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="meltemercin.loginandregisterwithjson.Profil">
-
+    tools:context="meltemercin.loginandregisterwithjson.Profil"
+    android:orientation="vertical">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="PROFİL SAYFASINA HOŞGELDİNİZ"/>
+    <Button
+        android:onClick="CikisYap"
+        android:text="Çıkış Yap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
