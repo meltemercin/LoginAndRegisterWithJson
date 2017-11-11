@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    tools:context="meltemercin.loginandregisterwithjson.MainActivity">
+
+    <TextView
+      android:text="Kullanıcı Girişi"
+        android:textSize="30sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+
+       />
+    <EditText
+
+        android:id="@+id/mail"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="E-Mail"
+        android:textAlignment="center"
+
+        />
+    <EditText
+
+        android:id="@+id/pass"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:hint="Şifre"
+        android:inputType="numberPassword"
+         />
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:weightSum="2">
+    <Button
+        android:layout_weight="1"
+        android:onClick="girisYap"
+        android:id="@+id/girisYap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="Giriş Yap"/>
+    <Button
+        android:layout_weight="1"
+        android:onClick="kayitYap"
+        android:id="@+id/kayit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="Kayıt Ol"/>
+</LinearLayout>
+
+</LinearLayout>
